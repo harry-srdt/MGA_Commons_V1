@@ -1,5 +1,6 @@
 package in.co.srdt.mgacommonsv1.repository;
 
+import in.co.srdt.mgacommonsv1.dto.subjectOfferingManagement.TopicsListItem;
 import in.co.srdt.mgacommonsv1.entity.mgaAcademicStructure.MgaTopic;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -56,4 +57,16 @@ public interface MgaTopicRepository extends JpaRepository<MgaTopic, Long> {
     List<MgaTopic> findActiveByUnitIds(@Param("unitIds") List<Long> unitIds);
 
     List<MgaTopic> findByMgaUnit_MgaUnitIdInOrderByDisplaySequenceAsc(Collection<Long> unitIds);
+
+    @Query(value = """
+        select
+            mga_topic_id,
+            title
+        from
+            mga_topic
+        where
+            mga_unit_id = :unitId
+            and coalesce(active_status, 'A') = 'A'
+    """, nativeQuery = true)
+    List<TopicsListItem> findByMgaUnitId(@Param("unitId") Long unitId);
 }

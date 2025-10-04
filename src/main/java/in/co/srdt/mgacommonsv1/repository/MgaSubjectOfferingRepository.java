@@ -177,7 +177,7 @@ public interface MgaSubjectOfferingRepository extends JpaRepository<MgaSubjectOf
                 LEFT JOIN mga_subject_thumbnail mst 				ON mst.mga_subject_id = s.mga_subject_id
                 LEFT JOIN v_subject_time_rollup vstr 				ON vstr.mga_subject_id = s.mga_subject_id
                 LEFT JOIN mga_subject_offering_rating_summary ors 	ON ors.mga_subject_offering_id = so.mga_subject_offering_id
-            WHERE so.mga_subject_id = 29
+            WHERE so.mga_subject_id = :subjectId
                 AND COALESCE(so.active_status, 'A') = 'A'
                 AND COALESCE(s.active_status,  'A') = 'A'
                 AND COALESCE(mst.active_status,'A') = 'A'

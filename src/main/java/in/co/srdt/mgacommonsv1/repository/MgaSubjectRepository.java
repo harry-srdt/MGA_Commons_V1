@@ -2,6 +2,7 @@ package in.co.srdt.mgacommonsv1.repository;
 
 import in.co.srdt.mgacommonsv1.dto.studentApis.raw.SubjectBasicsRow;
 import in.co.srdt.mgacommonsv1.dto.academicStructure.SubjectBasicRow;
+import in.co.srdt.mgacommonsv1.dto.subjectOfferingManagement.UnitsListItem;
 import in.co.srdt.mgacommonsv1.entity.mgaAcademicStructure.MgaSubject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -57,4 +58,18 @@ public interface MgaSubjectRepository extends JpaRepository<MgaSubject, Long> {
     Page<MgaSubject> searchSubjects(@Param("code") String code,
                                     @Param("title") String title,
                                     Pageable pageable);
+
+    @Query(value = """
+        select
+            mga_unit_id,
+            name,
+            description
+        from
+            mga_unit
+        where
+            mga_subject_id = :subjectId
+            and coalesce(active_status,'A') = 'A'
+        """, nativeQuery = true)
+    List<UnitsListItem> findUnitsByMgaSubjectId(@Param("subjectId") Long subjectId);
+
 }
